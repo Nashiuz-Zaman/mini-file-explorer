@@ -54,6 +54,10 @@ body {
   @apply bg-dark-bg! text-neutral-50 transition-colors duration-300;
 }
 
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
 @utility primary-classes {
   @apply bg-primary border border-primary text-dark-bg
          active:bg-primary-dark active:border-primary-dark
