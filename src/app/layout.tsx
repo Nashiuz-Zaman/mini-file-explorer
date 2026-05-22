@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mini File Explorer",
+  title: "Explora | Mini File Explorer",
   description: "Mini File Explorer created using TypeScript, Next.js & Tailwind V4.",
 };
 

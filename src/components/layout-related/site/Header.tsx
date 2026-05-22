@@ -3,10 +3,10 @@ import { OuterContainer } from "@/components/shared/containers/OuterContainer";
 
 export const Header = () => {
   return (
-    <div className="h-20 border-b border-neutral-800 flex-center">
-      <OuterContainer>
+    <header className="h-16 border-b border-neutral-800">
+      <OuterContainer className="flex items-center h-full">
         <CompanyLogoBtn />
       </OuterContainer>
-    </div>
+    </header>
   );
 };
