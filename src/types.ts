@@ -1,7 +1,10 @@
+export type TNodeType = "folder" | "text-file";
+
 export interface IBaseNode {
   id: string;
   name: string;
   parentId: string | null;
+  type: TNodeType;
 }
 
 export interface IFolderNode extends IBaseNode {
@@ -18,5 +21,5 @@ export type TNode = IFolderNode | ITextFileNode;
 
 export interface IFileSystemState {
   nodes: Record<string, TNode>;
-  rootIds: string[];
+  rootId: string;
 }
