@@ -1,1 +1,86 @@
 @import "tailwindcss";
+
+@theme {
+  --breakpoint-2xs: 360px;
+  --breakpoint-xs: 480px;
+  --breakpoint-2md: 850px;
+  --breakpoint-2lg: 1100px;
+  --breakpoint-3xl: 1700px;
+  --breakpoint-4xl: 1920px;
+
+  --text-2xs: 0.625rem;
+  --text-3xs: 0.5rem;
+
+  --color-primary: #a8e063;
+  --color-primary-dark: #97ca59;
+  --color-primary-dark-2: #86b34f;
+  --color-primary-light: #b1e373;
+  --color-primary-light-2: #b9e682;
+  --color-secondary: #00b8db;
+  --color-secondary-dark: #00a6c5;
+  --color-secondary-dark-2: #0093af;
+  --color-secondary-light: #1abfdf;
+  --color-secondary-light-2: #33c6e2;
+  --color-dark-bg: #121212;
+  --color-dark-bg-light: #1c1c1c;
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
+  scroll-margin-top: 40px;
+}
+
+*::selection {
+  @apply bg-linear-to-br from-primary/60 to-secondary/60 text-white;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--color-primary);
+}
+
+button {
+  @apply cursor-pointer!;
+}
+
+html,
+body {
+  @apply bg-dark-bg! text-neutral-50 transition-colors duration-300;
+}
+
+@utility primary-classes {
+  @apply bg-primary border border-primary text-dark-bg
+         active:bg-primary-dark active:border-primary-dark
+         lg:hover:bg-primary-dark lg:hover:border-primary-dark
+         disabled:hover:bg-primary disabled:hover:border-primary disabled:hover:text-dark-bg;
+}
+
+@utility primary-outlined-classes {
+  @apply bg-transparent text-primary border-primary!
+         active:bg-primary/10 lg:hover:bg-primary/10 
+         disabled:hover:bg-transparent;
+}
+
+@utility danger-classes {
+  @apply bg-red-600 border border-red-600 text-white
+         hover:bg-red-500 hover:border-red-500
+         disabled:hover:bg-red-600 disabled:hover:border-red-600 disabled:hover:text-white;
+}
+
+@utility success-classes {
+  @apply bg-green-600 border border-green-600 text-white
+         hover:bg-green-500 hover:border-green-500
+         disabled:hover:bg-green-600 disabled:hover:border-green-600 disabled:hover:text-white;
+}
+
+@utility white-outlined-classes {
+  @apply bg-transparent border text-neutral-50! border-neutral-300/70!
+         lg:hover:bg-white/10 active:bg-white/10
+         disabled:hover:bg-transparent;
+}
