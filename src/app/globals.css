@@ -32,9 +32,7 @@
   scroll-margin-top: 40px;
 }
 
-*::selection {
-  @apply bg-linear-to-br from-primary/60 to-secondary/60 text-white;
-}
+
 
 *::-webkit-scrollbar {
   width: 8px;
