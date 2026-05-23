@@ -1,6 +1,6 @@
 # Explora
 
-A high-performance, web-based file management system built with Next.js, React, and TypeScript for a frontend assessment task.
+A high-performance, web-based file management system built with Next.js, React, and TypeScript.
 
 ## 🚀 Key Features
 
