@@ -57,12 +57,15 @@ export const Topbar = ({
     if (editName.trim() && editName !== activeNode.name) {
       onRename(activeNode.id, editName.trim());
     }
+
+    setPrevNodeId(null);
+    setEditName("");
   };
 
   const commonBtnClasses = "text-sm! rounded-sm! py-1.5! px-3!";
 
   return (
-    <div className="flex flex-wrap items-center justify-between px-4 py-2 bg-dark-bg-light border-b border-neutral-800">
+    <div className="flex flex-wrap items-center justify-between px-4 py-2 bg-dark-bg-light border-b border-neutral-800 gap-2">
       {/* New folder/file creation block */}
       <div className="flex flex-wrap items-center gap-3">
         <input
@@ -70,7 +73,7 @@ export const Topbar = ({
           placeholder="Name..."
           value={newItemName}
           onChange={(e) => setNewItemName(e.target.value)}
-          className="px-3 py-1.5 text-sm rounded-md outline-none focus:ring focus:ring-neutral-300 border border-neutral-700"
+          className="px-3 py-1.5 text-sm rounded-md outline-none focus:ring focus:ring-neutral-300 border border-neutral-700 max-w-[15rem]"
         />
 
         {/* Button to create a folder */}
@@ -99,16 +102,18 @@ export const Topbar = ({
         <div className="flex flex-wrap items-center gap-3">
           <input
             type="text"
+            placeholder="Rename..."
             value={editName}
             onChange={(e) => setEditName(e.target.value)}
-            className="flex-1 px-3 py-1.5 text-sm rounded-md outline-none focus:ring focus:ring-neutral-300 border border-neutral-700 bg-transparent text-neutral-200"
+            className="flex-1 px-3 py-1.5 text-sm rounded-md outline-none focus:ring focus:ring-neutral-300 border border-neutral-700 bg-transparent text-neutral-200 max-w-[15rem]!"
           />
           <ButtonBtn
             onClick={handleRename}
             className={`primary-classes ${commonBtnClasses}`}
-            title="Save Name"
+            title="Rename folder/file name"
           >
-            Rename
+            <Icon icon={"mdi:rename"} />
+            <span className="hidden sm:inline">Rename</span>
           </ButtonBtn>
 
           <ButtonBtn
@@ -116,7 +121,8 @@ export const Topbar = ({
             className={`danger-classes ${commonBtnClasses}`}
             title="Delete this item"
           >
-            <Icon icon="mdi:trash-can-outline" className="text-lg" />
+            <Icon icon="mdi:trash-can-outline" />
+            <span className="hidden sm:inline">Delete</span>
           </ButtonBtn>
         </div>
       )}

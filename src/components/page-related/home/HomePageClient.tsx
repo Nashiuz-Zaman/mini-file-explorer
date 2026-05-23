@@ -49,9 +49,9 @@ export const HomePageClient = () => {
   const activeFileNode = activeFileId ? fileSystem.nodes[activeFileId] : null;
 
   return (
-    <div className="grid grid-cols-[20rem_auto] h-full">
+    <div className="grid grid-cols-1 grid-rows-[12rem_auto] md:grid-rows-1 md:grid-cols-[20rem_auto] h-full">
       {/* Sidebar tree */}
-      <section onClick={() => setSelectedNodeId(null)}>
+      <section className="overflow-y-auto h-full" onClick={() => setSelectedNodeId(null)}>
         <SidebarTree
           fileSystem={fileSystem}
           currentFolderId={currentFolderId}
@@ -70,7 +70,7 @@ export const HomePageClient = () => {
       </section>
 
       {/* Main panel */}
-      <section className="border-x border-neutral-800 h-full flex flex-col overflow-hidden">
+      <section className="border-x grow border-neutral-800 h-full flex flex-col overflow-hidden">
         <Topbar
           onDelete={deleteNode}
           onRename={renameNode}
