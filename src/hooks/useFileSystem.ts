@@ -37,6 +37,7 @@ export function useFileSystem() {
   // Navigation State
   const [currentFolderId, setCurrentFolderId] = useState<string>("root");
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
+  // Selection State
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   // Persist State
@@ -82,13 +83,23 @@ export function useFileSystem() {
 
   // Rename Node
   const renameNode = (id: string, newName: string) => {
+    const node = fileSystem.nodes[id];
+    if (!node) return;
+
     dispatch({
       type: ACTION_TYPES.rename,
       payload: {
         id,
-        newName: newName.endsWith(".txt") ? newName : newName + ".txt",
+        newName:
+          node.type === "text-file"
+            ? newName.endsWith(".txt")
+              ? newName
+              : newName + ".txt"
+            : newName,
       },
     });
+
+    if (selectedNodeId === id) setSelectedNodeId(null);
   };
 
   // Delete Node
