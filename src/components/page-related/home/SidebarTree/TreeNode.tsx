@@ -9,6 +9,8 @@ interface ITreeNodeProps {
   depth: number;
   currentFolderId: string;
   activeFileId: string | null;
+  selectedNodeId: string | null;
+  setSelectedNodeId: (id: string) => void;
   onFolderClick: (id: string) => void;
   onFileClick: (id: string) => void;
 }
@@ -21,6 +23,8 @@ export const TreeNode = ({
   activeFileId,
   onFolderClick,
   onFileClick,
+  selectedNodeId,
+  setSelectedNodeId,
 }: ITreeNodeProps) => {
   const node = nodes[nodeId];
   // Keeping track of whether this folder is open or closed
@@ -31,12 +35,12 @@ export const TreeNode = ({
   const isFolder = node.type === "folder";
 
   // Check if the folder or file is selected
-  const isSelected = isFolder
-    ? currentFolderId === node.id
-    : activeFileId === node.id;
+  const isSelected = selectedNodeId === node.id;
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    setSelectedNodeId(node.id);
 
     if (isFolder) {
       setIsOpen((prev) => !prev);
@@ -53,8 +57,8 @@ export const TreeNode = ({
       {/* The actual row for the file or folder */}
       <div
         onClick={handleClick}
-        className={`cursor-pointer hover:bg-white/30 transition-colors ${isSelected ? "bg-white/20" : ""}`}
-        style={{ paddingLeft: `${depth * 7}px` }}
+        className={`cursor-pointer hover:bg-white/30 transition-colors  ${isSelected ? "bg-white/20" : ""}`}
+        style={{ paddingLeft: `${depth * 10}px` }}
       >
         <OuterContainer as="div" className="flex items-center gap-1 py-1.5">
           {/* Show caret icons to indicate open or closed */}
@@ -66,10 +70,10 @@ export const TreeNode = ({
           {isFolder ? (
             <Icon
               icon={isOpen ? "mdi:folder-open" : "mdi:folder"}
-              className="text-primary"
+              className="text-primary ml-px"
             />
           ) : (
-            <Icon icon="mdi:file-document-outline" className="ml-5.5" />
+            <Icon icon="mdi:file-document-outline" className="ml-5" />
           )}
 
           {/* Show the name of the file or folder */}
@@ -94,6 +98,8 @@ export const TreeNode = ({
               activeFileId={activeFileId}
               onFolderClick={onFolderClick}
               onFileClick={onFileClick}
+              selectedNodeId={selectedNodeId}
+              setSelectedNodeId={setSelectedNodeId}
             />
           ))}
         </div>

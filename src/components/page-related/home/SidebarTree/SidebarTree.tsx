@@ -8,6 +8,8 @@ interface ISidebarTreeProps {
   onFolderClick: (id: string) => void;
   onFileClick: (id: string) => void;
   className?: string;
+  selectedNodeId: string | null;
+  setSelectedNodeId: (id: string) => void;
 }
 
 export function SidebarTree({
@@ -17,6 +19,8 @@ export function SidebarTree({
   onFolderClick,
   onFileClick,
   className = "",
+  selectedNodeId,
+  setSelectedNodeId,
 }: ISidebarTreeProps) {
   return (
     <div className={`overflow-y-auto h-full select-none ${className}`}>
@@ -28,6 +32,8 @@ export function SidebarTree({
         activeFileId={activeFileId}
         onFolderClick={onFolderClick}
         onFileClick={onFileClick}
+        selectedNodeId={selectedNodeId}
+        setSelectedNodeId={setSelectedNodeId}
       />
     </div>
   );
