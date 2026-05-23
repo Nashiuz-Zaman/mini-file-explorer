@@ -64,7 +64,7 @@ export function useFileSystem() {
           }
         : {
             id: newId,
-            name,
+            name: name.endsWith(".txt") ? name : name + ".txt",
             type: "text-file",
             parentId,
             content: "",
