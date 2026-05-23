@@ -53,20 +53,45 @@ export function useFileSystem() {
     name: string,
     type: "folder" | "text-file",
   ) => {
+    // Format target name
+    const targetName =
+      type === "text-file"
+        ? name.endsWith(".txt")
+          ? name
+          : name + ".txt"
+        : name;
+
+    // Check parent's children for a sibling with the same name
+    const parentNode = fileSystem.nodes[parentId];
+
+    if (parentNode && parentNode.type === "folder") {
+      const isDuplicate = parentNode?.childrenIds?.some((childId) => {
+        const childNode = fileSystem.nodes[childId];
+        return childNode && childNode.name === targetName;
+      });
+
+      if (isDuplicate) {
+        alert(
+          `A folder or file with the name "${targetName}" already exists in this folder.`,
+        );
+        return;
+      }
+    }
+
     const newId = crypto.randomUUID();
 
     const newNode: TNode =
       type === "folder"
         ? {
             id: newId,
-            name,
+            name: targetName,
             type: "folder",
             parentId,
             childrenIds: [],
           }
         : {
             id: newId,
-            name: name.endsWith(".txt") ? name : name + ".txt",
+            name: targetName,
             type: "text-file",
             parentId,
             content: "",
@@ -86,16 +111,38 @@ export function useFileSystem() {
     const node = fileSystem.nodes[id];
     if (!node) return;
 
+    // Format target name
+    const targetName =
+      node.type === "text-file"
+        ? newName.endsWith(".txt")
+          ? newName
+          : newName + ".txt"
+        : newName;
+
+    if (node.parentId) {
+      const parentNode = fileSystem.nodes[node.parentId];
+
+      if (parentNode && parentNode.type === "folder") {
+        const isDuplicate = parentNode?.childrenIds?.some((childId) => {
+          if (childId === id) return false; // Skip checking against itself
+          const childNode = fileSystem.nodes[childId];
+          return childNode && childNode.name === targetName;
+        });
+
+        if (isDuplicate) {
+          alert(
+            `A folder or file with the name "${targetName}" already exists in this folder.`,
+          );
+          return;
+        }
+      }
+    }
+
     dispatch({
       type: ACTION_TYPES.rename,
       payload: {
         id,
-        newName:
-          node.type === "text-file"
-            ? newName.endsWith(".txt")
-              ? newName
-              : newName + ".txt"
-            : newName,
+        newName: targetName,
       },
     });
 

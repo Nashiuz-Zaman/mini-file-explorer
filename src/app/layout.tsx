@@ -3,7 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Explora | Mini File Explorer",
-  description: "Mini File Explorer created using TypeScript, Next.js & Tailwind V4.",
+  description:
+    "Mini File Explorer created using TypeScript, Next.js & Tailwind V4.",
 };
 
 export default function RootLayout({
