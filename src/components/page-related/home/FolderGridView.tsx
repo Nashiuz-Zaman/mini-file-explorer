@@ -1,6 +1,6 @@
-import { useRef } from "react";
 import { Icon } from "@iconify/react";
 import { TNode } from "@/types";
+import { useDoubleClick } from "@/hooks/useDoubleClick";
 
 interface IFolderGridViewProps {
   currentFolderChildren: TNode[];
@@ -17,9 +17,19 @@ export const FolderGridView = ({
   onOpenFolder,
   onOpenFile,
 }: IFolderGridViewProps) => {
-  const lastTapRef = useRef<{ time: number; nodeId: string | null }>({
-    time: 0,
-    nodeId: null,
+  const handleItemInteraction = useDoubleClick({
+    onSingleClick: (id) => onSelect(id),
+    onDoubleClick: (id) => {
+      const node = currentFolderChildren.find((n) => n.id === id);
+      if (!node) return;
+
+      if (node.type === "folder") {
+        onOpenFolder(id);
+      } else {
+        onOpenFile(id);
+      }
+    },
+    delay: 300,
   });
 
   if (currentFolderChildren.length === 0) {
@@ -31,32 +41,6 @@ export const FolderGridView = ({
     );
   }
 
-  const handleTap = (e: React.MouseEvent | React.TouchEvent, node: TNode) => {
-    e.stopPropagation();
-
-    const now = new Date().getMilliseconds();
-    const tapDelay = 300;
-    const timeDiff = now - lastTapRef.current.time;
-    const isSameNode = lastTapRef.current.nodeId === node.id;
-    const isFolder = node.type === "folder";
-
-    // Single click highlight
-    onSelect(node.id);
-
-    if (isSameNode && timeDiff < tapDelay) {
-      if (isFolder) {
-        onOpenFolder(node.id);
-      } else {
-        onOpenFile(node.id);
-      }
-      // Reset timing reference to prevent loop
-      lastTapRef.current = { time: 0, nodeId: null };
-    } else {
-      // Track this click as the last tap
-      lastTapRef.current = { time: now, nodeId: node.id };
-    }
-  };
-
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 p-4 select-none">
       {currentFolderChildren.map((node) => {
@@ -66,7 +50,7 @@ export const FolderGridView = ({
         return (
           <div
             key={node.id}
-            onClick={(e) => handleTap(e, node)} // Inline arrow feeds the active node instance safely
+            onClick={(e) => handleItemInteraction(e, node.id)}
             className={`flex flex-col items-center p-3 rounded-md cursor-pointer transition-all border max-w-25 text-center ${
               isSelected
                 ? "bg-white/10 border-white/40 text-neutral-200 shadow-sm"
