@@ -8,7 +8,7 @@ A high-performance, web-based file management system built with Next.js, React, 
 - **Collision Prevention:** Enforces structural integrity by blocking duplicate names within the same directory level.
 - **State Persistence:** Automated synchronization of the file system tree state to `localStorage`.
 - **Responsive UI:** Mobile-first layout featuring responsive User interface
-- **Performance Optimized:** Implements dynamic code splitting and direct imports to maintain a minimal bundle size.
+- **Performance Optimized:** Implements dynamic imports.
 
 ## 🛠️ Tech Stack
 
