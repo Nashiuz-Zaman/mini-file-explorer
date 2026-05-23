@@ -16,11 +16,6 @@
   --color-primary-dark-2: #86b34f;
   --color-primary-light: #b1e373;
   --color-primary-light-2: #b9e682;
-  --color-secondary: #00b8db;
-  --color-secondary-dark: #00a6c5;
-  --color-secondary-dark-2: #0093af;
-  --color-secondary-light: #1abfdf;
-  --color-secondary-light-2: #33c6e2;
   --color-dark-bg: #121212;
   --color-dark-bg-light: #1c1c1c;
   --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -31,8 +26,6 @@
   scrollbar-color: var(--color-primary) transparent;
   scroll-margin-top: 40px;
 }
-
-
 
 *::-webkit-scrollbar {
   width: 8px;
@@ -82,7 +75,6 @@ body {
 }
 
 @utility white-outlined-classes {
-  @apply bg-transparent border text-neutral-50! border-neutral-300/70!
-         lg:hover:bg-white/10 active:bg-white/10
+  @apply bg-transparent border text-neutral-50! border-neutral-300/70! lg:hover:bg-white/10 active:bg-white/10
          disabled:hover:bg-transparent;
 }
