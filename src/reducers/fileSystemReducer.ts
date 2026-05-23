@@ -1,5 +1,6 @@
-import { IFileSystemState, TNode, IFolderNode } from "@/types";
+import { IFileSystemState, TNode } from "@/types";
 
+// Constant object of all the types for string name accuracy
 export const ACTION_TYPES = Object.freeze({
   init: "INITIALIZE",
   create: "CREATE_NODE",
@@ -8,6 +9,7 @@ export const ACTION_TYPES = Object.freeze({
   updateContent: "UPDATE_CONTENT",
 });
 
+// Action types and their payload types
 export type FileSystemAction =
   | { type: (typeof ACTION_TYPES)["init"]; payload: IFileSystemState }
   | {
@@ -24,10 +26,10 @@ export type FileSystemAction =
       payload: { id: string; content: string };
     };
 
-export function fileSystemReducer(
+export const fileSystemReducer = (
   state: IFileSystemState,
   action: FileSystemAction,
-): IFileSystemState {
+): IFileSystemState => {
   switch (action.type) {
     case ACTION_TYPES.init:
       return action.payload;
@@ -59,7 +61,7 @@ export function fileSystemReducer(
         ...state,
         nodes: {
           ...state.nodes,
-          [id]: { ...state.nodes[id], name: newName },
+          [id]: { ...state.nodes[id], name: newName.trim() },
         },
       };
     }
@@ -72,30 +74,38 @@ export function fileSystemReducer(
       if (!targetNode) return state;
 
       const parentId = targetNode.parentId;
-      const updatedNodes = { ...state.nodes };
+      const allNodes = structuredClone(state.nodes);
 
-      // Recursively collect all internal children maps to purge completely
+      // Recursively collect all the children
       const collectDescendantIds = (nodeId: string): string[] => {
-        const node = updatedNodes[nodeId];
-        if (!node) return [];
-        return node.type === "folder"
-          ? [nodeId, ...node.childrenIds.flatMap(collectDescendantIds)]
+        const nodeToDelete = allNodes[nodeId];
+        if (!nodeToDelete) return [];
+
+        return nodeToDelete.type === "folder"
+          ? [
+              nodeToDelete.id,
+              ...nodeToDelete.childrenIds.flatMap((childrenNodeId) =>
+                collectDescendantIds(childrenNodeId),
+              ),
+            ]
           : [nodeId];
       };
 
       const idsToRemove = collectDescendantIds(id);
-      idsToRemove.forEach((removeId) => delete updatedNodes[removeId]);
+      idsToRemove.forEach((removeId) => delete allNodes[removeId]);
 
-      // Remove the direct pointer tracking trace from parent folder
-      if (parentId && updatedNodes[parentId]?.type === "folder") {
-        const parentFolder = updatedNodes[parentId] as IFolderNode;
-        updatedNodes[parentId] = {
+      // Remove the id of the deleted node from its parent's childrenIds array
+      const parentFolder = parentId ? allNodes[parentId] : null;
+      if (parentFolder && parentFolder.type === "folder") {
+        allNodes[parentFolder.id] = {
           ...parentFolder,
-          childrenIds: parentFolder.childrenIds.filter((cId) => cId !== id),
+          childrenIds: parentFolder.childrenIds.filter(
+            (childrenId) => childrenId !== id,
+          ),
         };
       }
 
-      return { ...state, nodes: updatedNodes };
+      return { ...state, nodes: allNodes };
     }
 
     case ACTION_TYPES.updateContent: {
@@ -115,4 +125,4 @@ export function fileSystemReducer(
     default:
       return state;
   }
-}
+};
