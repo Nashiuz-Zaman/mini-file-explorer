@@ -1,3 +1,4 @@
+import { OuterContainer } from "@/components/shared/containers/OuterContainer";
 import { TNode } from "@/types";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
@@ -52,32 +53,35 @@ export const TreeNode = ({
       {/* The actual row for the file or folder */}
       <div
         onClick={handleClick}
-        className={`flex items-center gap-1 py-1.5 cursor-pointer hover:bg-white/30 transition-colors ${isSelected ? "bg-primary/20" : ""}`}
-        style={{ paddingLeft: `${depth * 4}px` }}
+        className={`cursor-pointer hover:bg-white/30 transition-colors ${isSelected ? "bg-white/20" : ""}`}
+        style={{ paddingLeft: `${depth * 7}px` }}
       >
-        {/* Show caret icons to indicate open or closed */}
-        {isFolder && (
-          <Icon
-            icon={isOpen ? "mdi:chevron-down" : "mdi:chevron-right"}
-            className="text-lg"
-          />
-        )}
+        <OuterContainer as="div" className="flex items-center gap-1 py-1.5">
+          {/* Show caret icons to indicate open or closed */}
+          {isFolder && (
+            <Icon icon={isOpen ? "mdi:chevron-down" : "mdi:chevron-right"} />
+          )}
 
-        {/* Pick the right icon based on what kind of item this is */}
-        {isFolder ? (
-          <Icon
-            icon={isOpen ? "mdi:folder-open" : "mdi:folder"}
-            className="text-primary"
-          />
-        ) : (
-          <Icon icon="mdi:file-document-outline" />
-        )}
+          {/* Pick the icon based on the type */}
+          {isFolder ? (
+            <Icon
+              icon={isOpen ? "mdi:folder-open" : "mdi:folder"}
+              className="text-primary"
+            />
+          ) : (
+            <Icon icon="mdi:file-document-outline" className="ml-5.5" />
+          )}
 
-        {/* Finally, show the name of the file or folder */}
-        <span className="text-xs font-medium truncate">{node.name}</span>
+          {/* Show the name of the file or folder */}
+          <span
+            className={`text-xs ${node.type === "folder" ? "font-medium" : ""} truncate`}
+          >
+            {node.name}
+          </span>
+        </OuterContainer>
       </div>
 
-      {/* If this is a folder and it's open, render all of its children right below it */}
+      {/* If this is a folder, render the children below it */}
       {isFolder && isOpen && (
         <div>
           {node.childrenIds.map((childId) => (

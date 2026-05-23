@@ -4,40 +4,26 @@ import { useEffect, useReducer, useState } from "react";
 
 import { IFileSystemState, TNode } from "@/types";
 import { ACTION_TYPES, fileSystemReducer } from "@/reducers/fileSystemReducer";
-
-// Empty Initial State
-const createEmptyInitialState = (): IFileSystemState => ({
-  rootId: "root",
-
-  nodes: {
-    root: {
-      id: "root",
-      name: "Desktop",
-      type: "folder",
-      parentId: null,
-      childrenIds: [],
-    },
-  },
-});
+import { generateInitialFileSystem } from "@/utils/init-file-system";
 
 // Lazy Initializer
 const initializeFileSystem = (): IFileSystemState => {
   // SSR Safety
   if (typeof window === "undefined") {
-    return createEmptyInitialState();
+    return generateInitialFileSystem();
   }
 
   try {
-    const storedData = localStorage.getItem("mini_file_explorer_data");
+    const storedData = localStorage.getItem("file_explorer_data");
     if (storedData) {
       return JSON.parse(storedData);
     }
 
-    return createEmptyInitialState();
+    return generateInitialFileSystem();
   } catch (error) {
     console.log("Failed to parse localStorage file system:", error);
 
-    return createEmptyInitialState();
+    return generateInitialFileSystem();
   }
 };
 
@@ -55,10 +41,7 @@ export function useFileSystem() {
   // Persist State
   useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "mini_file_explorer_data",
-        JSON.stringify(fileSystem),
-      );
+      localStorage.setItem("file_explorer_data", JSON.stringify(fileSystem));
     }
   }, [fileSystem]);
 
