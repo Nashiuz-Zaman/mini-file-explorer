@@ -37,6 +37,7 @@ export function useFileSystem() {
   // Navigation State
   const [currentFolderId, setCurrentFolderId] = useState<string>("root");
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   // Persist State
   useEffect(() => {
@@ -85,7 +86,7 @@ export function useFileSystem() {
       type: ACTION_TYPES.rename,
       payload: {
         id,
-        newName,
+        newName: newName.endsWith(".txt") ? newName : newName + ".txt",
       },
     });
   };
@@ -100,13 +101,9 @@ export function useFileSystem() {
     });
 
     // Reset invalid selections
-    if (activeFileId === id) {
-      setActiveFileId(null);
-    }
-
-    if (currentFolderId === id) {
-      setCurrentFolderId("root");
-    }
+    if (activeFileId === id) setActiveFileId(null);
+    if (currentFolderId === id) setCurrentFolderId("root");
+    if (selectedNodeId === id) setSelectedNodeId(null);
   };
 
   // Update File Content
@@ -130,6 +127,8 @@ export function useFileSystem() {
     renameNode,
     deleteNode,
     updateFileContent,
+    selectedNodeId,
+    setSelectedNodeId,
   };
 }
 
